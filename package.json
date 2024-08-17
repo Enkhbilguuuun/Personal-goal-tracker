@@ -11,7 +11,12 @@
   "dependencies": {
     "@internationalized/date": "^3.5.5",
     "@nextui-org/react": "^2.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
     "framer-motion": "^11.3.21",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.2",
+    "multer": "^1.4.5-lts.1",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18"
@@ -20,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "nodemon": "^3.1.4",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
