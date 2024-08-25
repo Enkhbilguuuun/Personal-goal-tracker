@@ -10,7 +10,7 @@ export default function App() {
             <CardHeader>
                 <Navbar/>
             </CardHeader>
-            <CardBody>
+            <CardBody className="h-auto">
                 <Calendar/>
             </CardBody>
             <CardFooter>
