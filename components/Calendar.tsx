@@ -13,22 +13,42 @@ import Goal from "./Goal";
 
 export default function App() {
   const DateContext = createContext<Date | undefined>(undefined);
-
   const goalInput = useRef<HTMLInputElement | null>(null);
+  const [value, setValue] = useState<CalendarDate | undefined>(today(getLocalTimeZone()));
+  const [dataBase, setDataBase] = useState([]);
 
-  function goalInputHandler() {
-    goalInput.current?.focus();
-    console.log(goalInput.current?.value);
-  }
-
-  const [value, setValue] = useState<CalendarDate | undefined>(
-    today(getLocalTimeZone())
-  );
 
   const handleChange = (newValue: CalendarDate | undefined) => {
     setValue(newValue);
     console.log(newValue);
   };
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/get", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data); setDataBase(data)})
+      .catch((error) => console.error(error));
+  },[])
+
+  function goalInputHandler() {
+    // goalInput.current?.focus();
+    // console.log(goalInput.current?.value);
+    fetch("http://localhost:3000/api/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        date: `${value?.month}.${value?.day}`,
+        goals: [goalInput.current?.value],
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  }
+
 
   return (
     <>
@@ -44,14 +64,20 @@ export default function App() {
           </CardBody>
           <CardBody className="h-[9vh] rounded-lg p-2 w-full bg-blue-100 row-span-4 sm:row-span-1 grid grid-rows-1 grid-cols-5 overflow-visible">
             <Input
-            className="w-[100%] col-span-5 sm:col-span-4"
+              className="w-[100%] col-span-5 sm:col-span-4"
               type="text"
               variant="underlined"
               label="Goal"
               ref={goalInput}
               placeholder="Enter your goal"
             />
-            <Button radius="lg" className="sm:w-[80%] h-[40%] self-center overflow-visible gap-[5px]" onClick={goalInputHandler}>Add</Button>
+            <Button
+              radius="lg"
+              className="sm:w-[80%] h-[40%] self-center overflow-visible gap-[5px]"
+              onClick={goalInputHandler}
+            >
+              Add
+            </Button>
           </CardBody>
         </CardBody>
         <CardBody className="h-auto w-full flex justify-center items-center bg-green-200 col-span-12 sm:col-span-8 grid grid-rows-4 grid-cols-1">
