@@ -9,7 +9,7 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
 }
 
 const {id} = req.query;
-const {date} = req.body
+const {goals} = req.body
 
 
 
@@ -18,7 +18,7 @@ const {date} = req.body
       _id: { $oid: id},
     },
     update: {
-        $set: {email : date}
+        $set: {goals : goals}
         
     }
   });

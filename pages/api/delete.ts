@@ -16,5 +16,7 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
   }})
   console.log(id)
 
+  // const result = await mongoDataApiRequest('deleteMany', {filter: {}})
+
   res.status(200).json(result)
 }
