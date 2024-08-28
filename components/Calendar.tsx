@@ -15,7 +15,7 @@ export default function App() {
   const DateContext = createContext<Date | undefined>(undefined);
   const goalInput = useRef<HTMLInputElement | null>(null);
   const [value, setValue] = useState<CalendarDate | undefined>(today(getLocalTimeZone()));
-  const [dataBase, setDataBase] = useState([]);
+const [dataBase, setDataBase] = useState<{ date: string }[]>([]);
 
 
   const handleChange = (newValue: CalendarDate | undefined) => {
@@ -29,13 +29,30 @@ export default function App() {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data); setDataBase(data)})
+      .then((data) => {console.log(data); setDataBase(data.documents)})
       .catch((error) => console.error(error));
-  },[])
+      console.log("the saved database", dataBase);
+  },[]);
+
+
 
   function goalInputHandler() {
     // goalInput.current?.focus();
     // console.log(goalInput.current?.value);
+
+  if(dataBase.map((d) => d.date).includes(`${value?.month}.${value?.day}`)){
+    fetch("http://localhost:3000/api/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        
+        goals: [goalInput.current?.value],
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  }else{
     fetch("http://localhost:3000/api/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -47,6 +64,9 @@ export default function App() {
       .then((response) => response.json())
       .then((data) => console.log(data))
       .catch((error) => console.error(error));
+  }
+
+   
   };
 
   function goalDeleteHandler() {
