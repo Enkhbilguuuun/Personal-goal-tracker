@@ -20,6 +20,7 @@ export default function App() {
   );
   const [dataBase, setDataBase] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState<number | undefined>();
+  const [dependency, setDependency] = useState(0);
 
 
   const handleChange = (newValue: CalendarDate | undefined) => {
@@ -28,7 +29,7 @@ export default function App() {
       (d) => d.date === `${newValue?.month}.${newValue?.day}`
     )?._id;
     setSelectedId(id);
-
+  
   };
 
 
@@ -43,12 +44,15 @@ export default function App() {
         setDataBase(data.documents);
       })
       .catch((error) => console.error(error));
-  }, []);
+      "fetched the database again"
+  }, [dependency]);
 
 
   function goalInputHandler() {
 
-    const IdExists = dataBase.find((d) => d._id === selectedId)
+    setDependency(dependency + 1);
+
+    const IdExists = dataBase.find((d) => d._id === selectedId && d.date === `${value?.month}.${value?.day}`)
 
     if (
       IdExists
@@ -81,6 +85,8 @@ export default function App() {
         .then((response) => response.json())
         .then((data) => console.log(data))
         .catch((error) => console.error(error));
+
+
     }
   }
 
@@ -146,6 +152,7 @@ export default function App() {
           </CardHeader>
           <CardBody className="h-full w-full bg-blue-100 row-span-4 sm:row-span-3">
             <Goal />
+            
           </CardBody>
         </CardBody>
       </Card>
