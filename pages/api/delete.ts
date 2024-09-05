@@ -11,12 +11,12 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
   const {id} = req.query;
   const {date} = req.body;
 
-  const result = await mongoDataApiRequest('deleteOne', {filter: {
-    _id: { $oid: id } 
-  }})
-  console.log(id)
+  // const result = await mongoDataApiRequest('deleteOne', {filter: {
+  //   _id: { $oid: id } 
+  // }})
+  // console.log(id)
 
-  // const result = await mongoDataApiRequest('deleteMany', {filter: {}})
+  const result = await mongoDataApiRequest('deleteMany', {filter: {}})
 
   res.status(200).json(result)
 }
