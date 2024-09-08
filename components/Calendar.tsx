@@ -29,6 +29,7 @@ export default function App() {
       (d) => d.date === `${newValue?.month}.${newValue?.day}`
     )?._id;
     setSelectedId(id);
+    
   
   };
 
@@ -44,7 +45,9 @@ export default function App() {
         setDataBase(data.documents);
       })
       .catch((error) => console.error(error));
-      "fetched the database again"
+      "fetched the database again";
+
+     handleChange(value);
   }, [dependency]);
 
 
@@ -55,7 +58,7 @@ export default function App() {
     const IdExists = dataBase.find((d) => d._id === selectedId && d.date === `${value?.month}.${value?.day}`)
 
     if (
-      IdExists
+      IdExists && goalInput.current?.value
     ) {
       console.log("this is matched id", selectedId);
       fetch(`http://localhost:3000/api/update?id=${selectedId}`, {
@@ -72,7 +75,7 @@ export default function App() {
         .then((response) => response.json())
         .then((data) => console.log(data))
         .catch((error) => console.error(error));
-    } else {
+    } else if (goalInput.current?.value) {
       console.log("this is not matched id", selectedId);
       fetch("http://localhost:3000/api/create", {
         method: "POST",
@@ -151,8 +154,9 @@ export default function App() {
             Objectives of {value?.month}.{value?.day}
           </CardHeader>
           <CardBody className="h-full w-full bg-blue-100 row-span-4 sm:row-span-3">
-            <Goal />
-            
+         {dataBase.find((d) => d._id === selectedId)?.goals?.map((goal: any) => (
+           goal && goal.trim() !== "" ? <Goal goals={goal} /> : <p>No data</p>
+         )) ?? <p className="text-default-500 self-center ">No Goals Yet ;D</p>}
           </CardBody>
         </CardBody>
       </Card>
